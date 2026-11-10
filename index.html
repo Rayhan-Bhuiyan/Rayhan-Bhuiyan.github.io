@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200..900;1,9..144,200..900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: the reel plays full screen with every film in it, the name sits on it like a title card, and the screen pulls back into the page as you scroll. Films one per screen. A cream act for what he makes. A quiet way to reach him. */
+/* Layout idea: the reel plays full screen with every film in it, one at a time, and the name sits in the middle like a title card. The screen pulls back into the page as you scroll. Films one per screen. A cream act for what he makes. A quiet way to reach him. */
 :root{
   --black:#0b0708;
   --night:#140c0e;
@@ -41,16 +41,30 @@ img,video{display:block;max-width:100%}
 .nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;justify-content:space-between;align-items:center;padding:20px var(--gut);mix-blend-mode:difference;color:#fff}
 .nav .links{display:flex;gap:24px}
 
-/* hero: the reel, full screen */
+/* hero: the reel, full screen, name in the middle */
 .hero{position:relative;height:175svh;min-height:1100px}
-.stage{position:sticky;top:0;height:100vh;height:100dvh;min-height:560px;overflow:hidden;overflow:clip;contain:paint;isolation:isolate;background:var(--black)}
+.stage{--ny:47%;position:sticky;top:0;height:100vh;height:100dvh;min-height:560px;overflow:hidden;overflow:clip;contain:paint;isolation:isolate;background:var(--black)}
 .screen{position:absolute;inset:0;overflow:hidden;transform-origin:50% 42%;background:var(--black);cursor:pointer}
 #heroFilm{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.screen::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,7,8,.5) 0%,rgba(11,7,8,0) 20%,rgba(11,7,8,0) 50%,rgba(11,7,8,.5) 72%,rgba(11,7,8,.9) 100%)}
+.screen::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 78% 26% at 50% var(--ny),rgba(11,7,8,.5) 0%,rgba(11,7,8,.22) 55%,rgba(11,7,8,0) 100%),linear-gradient(180deg,rgba(11,7,8,.5) 0%,rgba(11,7,8,0) 18%,rgba(11,7,8,0) 66%,rgba(11,7,8,.55) 84%,rgba(11,7,8,.88) 100%)}
 .shade{position:absolute;inset:0;z-index:3;background:var(--black);opacity:0;pointer-events:none}
+.title{position:absolute;left:0;right:0;top:var(--ny);z-index:2;pointer-events:none}
+.name{display:flex;justify-content:center;align-items:baseline;gap:.2em;transform:translateY(-50%);font-family:var(--display);font-weight:300;font-size:min(12.5vw,26vh);line-height:.86;letter-spacing:-.045em;color:var(--cream);white-space:nowrap;transition:text-shadow 1.2s}
+.name i{font-weight:300}
+.name .w{display:inline-block;overflow:hidden;padding:0 .07em .14em 0;margin-bottom:-.14em}
+.name.in{text-shadow:0 4px 42px rgba(11,7,8,.5)}
+.name.in .w{overflow:visible}
+.name .l{display:inline-block;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(110%)}}
+@media (max-aspect-ratio:9/10){
+  .stage{--ny:58%}
+  .name{flex-direction:column;align-items:center;gap:0;font-size:30vw;line-height:.82}
+  .name .w:first-child{transform:translateX(-.3em)}
+  .name .w:last-child{transform:translateX(.3em)}
+}
 .hero-type{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 var(--gut) 22px;pointer-events:none}
 .hero-type a{pointer-events:auto}
-.credit-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:clamp(12px,1.6vw,22px)}
+.credit-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
 .credit{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;min-width:0;color:var(--cream)}
 .credit .dot{flex:0 0 auto;align-self:center;width:7px;height:7px;border-radius:50%;background:var(--wine-hi);animation:pulse 2s infinite}
 .credit .t{font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(19px,2vw,28px);letter-spacing:-.01em;line-height:1.1}
@@ -58,12 +72,6 @@ img,video{display:block;max-width:100%}
 .credit.swap .t,.credit.swap .k{animation:cred .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes cred{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(179,36,61,.7)}100%{box-shadow:0 0 0 12px rgba(179,36,61,0)}}
-.name{font-family:var(--display);font-weight:300;font-size:min(13vw,30vh);line-height:.84;letter-spacing:-.045em;color:var(--cream);white-space:nowrap}
-.name i{font-weight:300}
-.name .w{display:inline-block;overflow:hidden;padding:0 .07em .12em 0;margin-bottom:-.12em;vertical-align:top}
-.name .l{display:inline-block;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both}
-@keyframes rise{from{transform:translateY(108%)}}
-@media (max-aspect-ratio:9/10){.name{font-size:26.5vw}.name .w{display:block}.screen::after{background:linear-gradient(180deg,rgba(11,7,8,.5) 0%,rgba(11,7,8,0) 18%,rgba(11,7,8,0) 40%,rgba(11,7,8,.66) 61%,rgba(11,7,8,.95) 83%)}}
 .bars{display:flex;gap:4px;margin-top:clamp(14px,1.8vw,22px)}
 .bars span{position:relative;flex:1;height:2px;overflow:hidden;background:rgba(241,232,216,.22)}
 .bars b{position:absolute;inset:0;background:var(--cream);transform-origin:0 50%;transform:scaleX(0)}
@@ -208,7 +216,7 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:clamp(80px
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <header class="nav">
-  <span class="label">AI product films</span>
+  <span class="label">AI films &amp; content</span>
   <nav class="links">
     <a class="label" href="#work">Work</a>
     <a class="label" href="#contact">Contact</a>
@@ -221,6 +229,7 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:clamp(80px
       <div class="screen" id="screen" data-cursor>
         <video id="heroFilm" muted loop playsinline autoplay preload="auto" aria-label="Montage of every film"></video>
       </div>
+      <div class="title"><h1 class="name">Raihan <i>Bhuiya</i></h1></div>
       <div class="hero-type">
         <div class="credit-row">
           <p class="credit" id="credit"><i class="dot"></i><span class="t" id="cutT">&nbsp;</span><span class="k label" id="cutK"></span></p>
@@ -232,7 +241,6 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:clamp(80px
             <span class="core"></span>
           </a>
         </div>
-        <h1 class="name">Raihan <i>Bhuiya</i></h1>
         <div class="bars" id="bars" aria-hidden="true"></div>
       </div>
       <div class="shade" id="shade" aria-hidden="true"></div>
@@ -351,21 +359,19 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   $("#track").innerHTML=one.repeat(4);
 })();
 
-/* ---------- hero: the reel, full screen ---------- */
+/* ---------- hero: the reel, full screen, name in the middle ---------- */
 (function(){
-  const hero=$(".hero"),stage=$("#stage"),screen=$("#screen"),vid=$("#heroFilm"),credit=$("#credit"),ttl=$("#cutT"),knd=$("#cutK"),bars=$("#bars"),type=$(".hero-type"),shade=$("#shade"),nameEl=$(".name");
-  /* every film in the montage, cut by cut: [frames at 24fps, films on screen]. Three films = split screen. */
-  const CUTS={
-    wide:[[24,["tone-commercial"]],[24,["tone-runner"]],[24,["guardians"]],[34,["fire-fight","transformation","aurafarming"]],[24,["caveman"]],[24,["spendwise"]],[34,["tone-headphones","aura-serum","aurafarming-teaser"]],[24,["piano-worlds"]],[24,["aura-ugc"]],[24,["tone-commercial"]],[34,["what-if-grow","what-if-internet","fire-fight"]],[24,["guardians"]],[24,["caveman"]],[24,["tone-commercial"]],[24,["piano-worlds"]],[24,["guardians"]]],
-    tall:[[24,["fire-fight"]],[34,["tone-runner","spendwise","aura-ugc"]],[24,["transformation"]],[24,["what-if-internet"]],[34,["caveman","guardians","piano-worlds"]],[19,["tone-headphones"]],[24,["aura-serum"]],[24,["aurafarming"]],[34,["tone-commercial","caveman","guardians"]],[24,["aurafarming-teaser"]],[24,["what-if-grow"]],[24,["fire-fight"]],[24,["transformation"]],[24,["aurafarming"]]]
-  };
+  const hero=$(".hero"),stage=$("#stage"),screen=$("#screen"),vid=$("#heroFilm"),credit=$("#credit"),ttl=$("#cutT"),knd=$("#cutK"),bars=$("#bars"),type=$(".hero-type"),shade=$("#shade"),nameEl=$(".name"),title=$(".title");
+  /* every film in the montage, cut by cut: [frames at 24fps, film] */
+  const CUTS={"wide":[[24,"tone-commercial"],[24,"tone-runner"],[24,"fire-fight"],[24,"guardians"],[24,"aura-serum"],[24,"caveman"],[24,"transformation"],[24,"spendwise"],[19,"tone-headphones"],[24,"piano-worlds"],[24,"what-if-internet"],[24,"aura-ugc"],[24,"aurafarming"],[24,"tone-commercial"],[24,"aurafarming-teaser"],[24,"guardians"],[24,"what-if-grow"],[24,"guardians"]],"tall":[[24,"fire-fight"],[24,"tone-runner"],[24,"transformation"],[24,"spendwise"],[24,"what-if-internet"],[24,"caveman"],[19,"tone-headphones"],[24,"aura-ugc"],[24,"aura-serum"],[24,"guardians"],[24,"aurafarming"],[24,"tone-commercial"],[24,"aurafarming-teaser"],[24,"piano-worlds"],[24,"what-if-grow"],[24,"transformation"]]};
   const INFO={};CATEGORIES.forEach(c=>c.items.forEach(f=>{INFO[f.file]=f}));
   const plain=s=>s.replace(/<[^>]+>/g,"");
   let mode="",list=[],starts=[],total=1,cur=-1,vis=true;
 
   /* the name rises in, letter by letter */
   nameEl.setAttribute("aria-label","Raihan Bhuiya");
-  nameEl.innerHTML=[["Raihan",0],["Bhuiya",1]].map(([w,it],wi)=>`<span class="w" aria-hidden="true">${it?"<i>":""}${[...w].map((ch,i)=>`<span class="l" style="animation-delay:${(.2+wi*.16+i*.045).toFixed(3)}s">${ch}</span>`).join("")}${it?"</i>":""}</span>`).join(" ");
+  nameEl.innerHTML=[["Raihan",0],["Bhuiya",1]].map(([w,it],wi)=>`<span class="w" aria-hidden="true">${it?"<i>":""}${[...w].map((ch,i)=>`<span class="l" style="animation-delay:${(.2+wi*.16+i*.045).toFixed(3)}s">${ch}</span>`).join("")}${it?"</i>":""}</span>`).join("");
+  setTimeout(()=>nameEl.classList.add("in"),reduce?0:1900);
 
   function play(){if(reduce||!vis||$("#lb").classList.contains("open"))return;const p=vid.play();p&&p.catch(()=>{})}
   function setSource(){
@@ -376,9 +382,8 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     if(reduce)vid.pause();else play();show(0);
   }
   function show(i){
-    cur=i;const files=list[i][1],one=files.length===1;
-    ttl.textContent=files.map(f=>plain((INFO[f]||{title:f}).title)).join(" · ");
-    knd.textContent=one?(INFO[files[0]]||{}).kind||"":`${files.length} films`;
+    cur=i;const f=INFO[list[i][1]]||{title:list[i][1],kind:""};
+    ttl.textContent=plain(f.title);knd.textContent=f.kind;
     credit.classList.remove("swap");void credit.offsetWidth;credit.classList.add("swap");
   }
   (function tick(){
@@ -388,20 +393,15 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     const bs=bars.children;for(let j=0;j<bs.length;j++){const p=j<i?1:j>i?0:Math.min(Math.max((t-starts[j])/(list[j][0]/24),0),1);bs[j].firstChild.style.transform=`scaleX(${p.toFixed(3)})`}
   })();
 
-  /* tap the montage to watch the film on screen; on split screens, the panel you tapped */
-  screen.addEventListener("click",e=>{
-    if(cur<0)return;const files=list[cur][1];let k=0;
-    if(files.length>1){const r=screen.getBoundingClientRect(),vw=vid.videoWidth||(mode==="wide"?1280:720),vh=vid.videoHeight||(mode==="wide"?720:1280),s=Math.max(r.width/vw,r.height/vh);
-      const c=mode==="wide"?(e.clientX-r.left-(r.width-vw*s)/2)/s:(e.clientY-r.top-(r.height-vh*s)/2)/s;k=c<431?0:c<848?1:2}
-    openFilm(INFO[files[k]]||{file:files[k]});vid.pause();
-  });
+  /* tap the montage to watch the film on screen */
+  screen.addEventListener("click",()=>{if(cur<0)return;const f=list[cur][1];openFilm(INFO[f]||{file:f});vid.pause()});
   $("#lbClose").addEventListener("click",()=>setTimeout(play,0));
 
   /* scrolling pulls the screen back into the page */
   function onScroll(){
     const range=Math.max(1,hero.offsetHeight-stage.offsetHeight),q=Math.min(Math.max(-hero.getBoundingClientRect().top/range,0),1),e=q*q*(3-2*q);
     screen.style.transform=e?`scale(${(1-e*.12).toFixed(4)})`:"";screen.style.borderRadius=`${(e*26).toFixed(1)}px`;
-    type.style.transform=`translateY(${(-e*46).toFixed(1)}px)`;type.style.opacity=(1-Math.min(q/.5,1)).toFixed(3);
+    type.style.transform=title.style.transform=`translateY(${(-e*46).toFixed(1)}px)`;type.style.opacity=title.style.opacity=(1-Math.min(q/.5,1)).toFixed(3);
     shade.style.opacity=Math.min(Math.max((q-.7)/.28,0),1).toFixed(3);
   }
   addEventListener("scroll",()=>requestAnimationFrame(onScroll),{passive:true});
