@@ -72,9 +72,6 @@ img,video{display:block;max-width:100%}
 .credit.swap .t,.credit.swap .k{animation:cred .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes cred{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(179,36,61,.7)}100%{box-shadow:0 0 0 12px rgba(179,36,61,0)}}
-.bars{display:flex;gap:4px;margin-top:clamp(14px,1.8vw,22px)}
-.bars span{position:relative;flex:1;height:2px;overflow:hidden;background:rgba(241,232,216,.22)}
-.bars b{position:absolute;inset:0;background:var(--cream);transform-origin:0 50%;transform:scaleX(0)}
 .seal{position:relative;flex:0 0 auto;overflow:hidden;contain:paint;width:clamp(86px,10vw,132px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:rgba(11,7,8,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .seal svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 18s linear infinite}
 .seal text{font-family:var(--body);font-size:9.6px;font-weight:600;letter-spacing:.24em;fill:var(--cream)}
@@ -241,7 +238,6 @@ footer{display:flex;justify-content:space-between;gap:12px;margin-top:clamp(80px
             <span class="core"></span>
           </a>
         </div>
-        <div class="bars" id="bars" aria-hidden="true"></div>
       </div>
       <div class="shade" id="shade" aria-hidden="true"></div>
     </div>
@@ -361,7 +357,7 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- hero: the reel, full screen, name in the middle ---------- */
 (function(){
-  const hero=$(".hero"),stage=$("#stage"),screen=$("#screen"),vid=$("#heroFilm"),credit=$("#credit"),ttl=$("#cutT"),knd=$("#cutK"),bars=$("#bars"),type=$(".hero-type"),shade=$("#shade"),nameEl=$(".name"),title=$(".title");
+  const hero=$(".hero"),stage=$("#stage"),screen=$("#screen"),vid=$("#heroFilm"),credit=$("#credit"),ttl=$("#cutT"),knd=$("#cutK"),type=$(".hero-type"),shade=$("#shade"),nameEl=$(".name"),title=$(".title");
   /* every film in the montage, cut by cut: [frames at 24fps, film] */
   const CUTS={"wide":[[24,"tone-commercial"],[24,"tone-runner"],[24,"fire-fight"],[24,"guardians"],[24,"aura-serum"],[24,"caveman"],[24,"transformation"],[24,"spendwise"],[19,"tone-headphones"],[24,"piano-worlds"],[24,"what-if-internet"],[24,"aura-ugc"],[24,"aurafarming"],[24,"tone-commercial"],[24,"aurafarming-teaser"],[24,"guardians"],[24,"what-if-grow"],[24,"guardians"]],"tall":[[24,"fire-fight"],[24,"tone-runner"],[24,"transformation"],[24,"spendwise"],[24,"what-if-internet"],[24,"caveman"],[19,"tone-headphones"],[24,"aura-ugc"],[24,"aura-serum"],[24,"guardians"],[24,"aurafarming"],[24,"tone-commercial"],[24,"aurafarming-teaser"],[24,"piano-worlds"],[24,"what-if-grow"],[24,"transformation"]]};
   const INFO={};CATEGORIES.forEach(c=>c.items.forEach(f=>{INFO[f.file]=f}));
@@ -377,7 +373,6 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   function setSource(){
     const m=innerWidth<innerHeight*.9?"tall":"wide";if(m===mode)return;mode=m;list=CUTS[m];
     let a=0;starts=list.map(c=>{const s=a;a+=c[0]/24;return s});total=a;cur=-1;
-    bars.innerHTML=list.map(()=>"<span><b></b></span>").join("");
     vid.poster=`media/hero-${m}.jpg`;vid.src=`media/hero-${m}.mp4`;
     if(reduce)vid.pause();else play();show(0);
   }
@@ -390,7 +385,6 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     requestAnimationFrame(tick);if(!vis||!list.length)return;
     const t=(vid.currentTime||0)%total;let i=0;for(let j=0;j<starts.length;j++)if(t>=starts[j]-.01)i=j;
     if(i!==cur)show(i);
-    const bs=bars.children;for(let j=0;j<bs.length;j++){const p=j<i?1:j>i?0:Math.min(Math.max((t-starts[j])/(list[j][0]/24),0),1);bs[j].firstChild.style.transform=`scaleX(${p.toFixed(3)})`}
   })();
 
   /* tap the montage to watch the film on screen */
